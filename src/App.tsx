@@ -173,12 +173,14 @@ function useLaneGroups(trace: TraceDocument | null) {
 function BreakdownSection({
   title,
   items,
+  sectionClassName,
 }: {
   title: string
   items: Array<{ id: string; title: string; text: string; kind?: string }>
+  sectionClassName: string
 }) {
   return (
-    <section aria-label={title} className="breakdown-section">
+    <section aria-label={title} className={`breakdown-section ${sectionClassName}`}>
       <div className="breakdown-section__header">
         <h3>{title}</h3>
         <span>{items.length}</span>
@@ -245,11 +247,22 @@ function RequestStructurePage({
         </article>
       </section>
 
-      <div className="request-page__content">
-        <BreakdownSection items={breakdown.currentInput} title={copy.currentInput} />
-        <BreakdownSection items={breakdown.historyConversation} title={copy.historyConversation} />
+      <div className="request-page__content request-page__content--stacked">
+        <BreakdownSection
+          items={breakdown.currentInput}
+          sectionClassName="breakdown-section--current-input"
+          title={copy.currentInput}
+        />
+        <BreakdownSection
+          items={breakdown.historyConversation}
+          sectionClassName="breakdown-section--history-conversation"
+          title={copy.historyConversation}
+        />
 
-        <section aria-label={copy.injectedPrompts} className="breakdown-section">
+        <section
+          aria-label={copy.injectedPrompts}
+          className="breakdown-section breakdown-section--injected-prompts"
+        >
           <div className="breakdown-section__header">
             <h3>{copy.injectedPrompts}</h3>
             <span>{breakdown.injectedPromptGroups.length}</span>
@@ -295,9 +308,20 @@ function RequestStructurePage({
           </div>
         </section>
 
-        <BreakdownSection items={breakdown.assistantHistory} title={copy.assistantHistory} />
-        <BreakdownSection items={breakdown.toolTrace} title={copy.toolTrace} />
-        <section aria-label={copy.finalEnvelope} className="breakdown-section">
+        <BreakdownSection
+          items={breakdown.assistantHistory}
+          sectionClassName="breakdown-section--assistant-history"
+          title={copy.assistantHistory}
+        />
+        <BreakdownSection
+          items={breakdown.toolTrace}
+          sectionClassName="breakdown-section--tool-trace"
+          title={copy.toolTrace}
+        />
+        <section
+          aria-label={copy.finalEnvelope}
+          className="breakdown-section breakdown-section--final-envelope"
+        >
           <div className="breakdown-section__header">
             <h3>{copy.finalEnvelope}</h3>
           </div>

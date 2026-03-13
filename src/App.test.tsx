@@ -42,6 +42,40 @@ describe('App', () => {
     expect(screen.getByText(/injected prompts/i)).toBeInTheDocument()
   })
 
+  test('assigns semantic section classes to request structure blocks for themed backgrounds', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: /^EN$/ }))
+    await user.upload(
+      screen.getByLabelText(/upload trace json/i),
+      new File([demoPayload], 'demo.json', { type: 'application/json' }),
+    )
+    await user.click(screen.getByRole('button', { name: /view request structure/i }))
+
+    expect(screen.getByRole('region', { name: /current input/i })).toHaveClass(
+      'breakdown-section--current-input',
+    )
+    expect(screen.getByRole('region', { name: /history conversation/i })).toHaveClass(
+      'breakdown-section--history-conversation',
+    )
+    expect(screen.getByRole('region', { name: /injected prompts/i })).toHaveClass(
+      'breakdown-section--injected-prompts',
+    )
+    expect(screen.getByRole('region', { name: /assistant history/i })).toHaveClass(
+      'breakdown-section--assistant-history',
+    )
+    expect(screen.getByRole('region', { name: /tool trace/i })).toHaveClass(
+      'breakdown-section--tool-trace',
+    )
+    expect(screen.getByRole('region', { name: /final request envelope/i })).toHaveClass(
+      'breakdown-section--final-envelope',
+    )
+    expect(screen.getByRole('main').querySelector('.request-page__content')).toHaveClass(
+      'request-page__content--stacked',
+    )
+  })
+
   test('splits assistant content and keeps repeated injections collapsed by default', async () => {
     const user = userEvent.setup()
     render(<App />)
